@@ -101,7 +101,7 @@ jobs:
     timeout-minutes: 10
     name: examples
     runs-on: ${{ github.repository == 'stainless-sdks/openai-python' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
-    if: github.repository == 'openai/openai-python' && (github.event_name == 'push' || github.event.pull_request.head.repo.fork)
+    if: github.repository == 'danny663788/openapi-python-4e28a4' && (github.event_name == 'push' || github.event.pull_request.head.repo.fork)
 
     steps:
       - uses: actions/checkout@v4
