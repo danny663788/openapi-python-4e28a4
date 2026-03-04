@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
-from typing_extensions import Literal, NotRequired, Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict, NotRequired
 
 __all__ = ["WebSearchToolParam", "UserLocation"]
 

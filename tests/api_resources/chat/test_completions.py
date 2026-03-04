@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import os
+import json
 from typing import Any, cast
 
-import json
 import httpx
 import pytest
 import pydantic
@@ -78,7 +78,9 @@ class TestCompletions:
         assert_matches_type(ChatCompletion, completion, path=["response"])
 
         assert route.called
-        request_body = json.loads(route.calls[0].request.content.decode())
+        call = cast(Any, route.calls[0])
+        request_content = cast(bytes, call.request.content)
+        request_body = json.loads(request_content.decode("utf-8"))
         assert request_body["web_search_options"]["include_domains"] == ["github.com", "*.gov"]
         assert request_body["web_search_options"]["exclude_domains"] == ["example.com", "*.edu"]
 
