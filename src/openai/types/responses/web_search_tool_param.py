@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Literal, NotRequired, Required, TypedDict
 
 __all__ = ["WebSearchToolParam", "UserLocation"]
 
@@ -45,13 +45,13 @@ class WebSearchToolParam(TypedDict, total=False):
     One of `low`, `medium`, or `high`. `medium` is the default.
     """
 
-    include_domains: List[str]
+    include_domains: NotRequired[List[str]]
     """
     Domains to include in the search results. Supports exact domains like `github.com`
     and wildcards like `*.gov`.
     """
 
-    exclude_domains: List[str]
+    exclude_domains: NotRequired[List[str]]
     """
     Domains to exclude from the search results. Supports exact domains like
     `example.com` and wildcards like `*.edu`.
