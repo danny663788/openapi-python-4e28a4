@@ -393,6 +393,18 @@ class WebSearchOptionsUserLocation(TypedDict, total=False):
 
 
 class WebSearchOptions(TypedDict, total=False):
+    include_domains: List[str]
+    """
+    Domains to include in the search results. Supports exact domains like `github.com`
+    and wildcards like `*.gov`.
+    """
+
+    exclude_domains: List[str]
+    """
+    Domains to exclude from the search results. Supports exact domains like
+    `example.com` and wildcards like `*.edu`.
+    """
+
     search_context_size: Literal["low", "medium", "high"]
     """
     High level guidance for the amount of context window space to use for the

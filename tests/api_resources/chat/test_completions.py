@@ -5,8 +5,11 @@ from __future__ import annotations
 import os
 from typing import Any, cast
 
+import json
+import httpx
 import pytest
 import pydantic
+from respx import MockRouter
 
 from openai import OpenAI, AsyncOpenAI
 from tests.utils import assert_matches_type
@@ -34,6 +37,50 @@ class TestCompletions:
             model="gpt-4o",
         )
         assert_matches_type(ChatCompletion, completion, path=["response"])
+
+    @parametrize
+    @pytest.mark.respx(base_url=base_url)
+    def test_method_create_with_domain_filters(self, client: OpenAI, respx_mock: MockRouter) -> None:
+        route = respx_mock.post("/chat/completions").mock(
+            return_value=httpx.Response(
+                200,
+                json={
+                    "id": "chatcmpl-domain-filter",
+                    "object": "chat.completion",
+                    "created": 0,
+                    "model": "gpt-4o",
+                    "choices": [
+                        {
+                            "index": 0,
+                            "message": {"role": "assistant", "content": "hello"},
+                            "finish_reason": "stop",
+                            "logprobs": None,
+                        }
+                    ],
+                    "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+                },
+            )
+        )
+
+        completion = client.chat.completions.create(
+            messages=[
+                {
+                    "content": "string",
+                    "role": "user",
+                }
+            ],
+            model="gpt-4o",
+            web_search_options={
+                "include_domains": ["github.com", "*.gov"],
+                "exclude_domains": ["example.com", "*.edu"],
+            },
+        )
+        assert_matches_type(ChatCompletion, completion, path=["response"])
+
+        assert route.called
+        request_body = json.loads(route.calls[0].request.content.decode())
+        assert request_body["web_search_options"]["include_domains"] == ["github.com", "*.gov"]
+        assert request_body["web_search_options"]["exclude_domains"] == ["example.com", "*.edu"]
 
     @parametrize
     def test_method_create_with_all_params_overload_1(self, client: OpenAI) -> None:

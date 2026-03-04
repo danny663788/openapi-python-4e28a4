@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._models import BaseModel
@@ -43,6 +43,18 @@ class WebSearchTool(BaseModel):
     search.
 
     One of `low`, `medium`, or `high`. `medium` is the default.
+    """
+
+    include_domains: Optional[List[str]] = None
+    """
+    Domains to include in the search results. Supports exact domains like `github.com`
+    and wildcards like `*.gov`.
+    """
+
+    exclude_domains: Optional[List[str]] = None
+    """
+    Domains to exclude from the search results. Supports exact domains like
+    `example.com` and wildcards like `*.edu`.
     """
 
     user_location: Optional[UserLocation] = None
