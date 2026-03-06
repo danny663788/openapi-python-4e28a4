@@ -219,6 +219,204 @@
   },
   {
    "cell_type": "markdown",
+   "id": "3d2ee578",
+   "metadata": {},
+   "source": [
+    "Use this **safe subset** first for a strict OpenAPI mock (Prism), in this order:\n",
+    "\n",
+    "1. demo.py  \n",
+    "2. module_client.py  \n",
+    "3. parsing.py  \n",
+    "4. parsing_tools.py  \n",
+    "5. streaming.py *(if your mock supports SSE; otherwise skip)*  \n",
+    "6. streaming.py *(same SSE caveat)*\n",
+    "\n",
+    "Likely to fail or require real services/files:\n",
+    "- audio.py\n",
+    "- speech_to_text.py\n",
+    "- text_to_speech.py\n",
+    "- uploads.py\n",
+    "- image_stream.py\n",
+    "- picture.py\n",
+    "- `examples/realtime/*`\n",
+    "- azure.py, azure_ad.py, azure_realtime.py\n",
+    "\n",
+    "Run subset quickly:\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a9b33e93",
+   "metadata": {
+    "vscode": {
+     "languageId": "bash"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "cd /home/ahi5/_workspace_/danny663788/Marlin/Marlin-sample-01/baseline/openai-python-4e28a4\n",
+    "source .venv/bin/activate\n",
+    "export OPENAI_API_KEY=\"sk-mock\"\n",
+    "export OPENAI_BASE_URL=\"http://127.0.0.1:4010/v1\"\n",
+    "\n",
+    "python examples/demo.py\n",
+    "python examples/module_client.py\n",
+    "python examples/parsing.py\n",
+    "python examples/parsing_tools.py"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c2c3e01f",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "If you want, I can provide a tiny bash runner that skips unsupported examples automatically and prints pass/fail per file."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1b8a94ab",
+   "metadata": {},
+   "source": [
+    "Use this setup to run the examples scripts against a local OpenAI API mock.\n",
+    "\n",
+    "### 1) Install project deps\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "72919ba8",
+   "metadata": {
+    "vscode": {
+     "languageId": "bash"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "cd /home/ahi5/_workspace_/danny663788/Marlin/Marlin-sample-01/baseline/openai-python-4e28a4\n",
+    "python -m venv .venv\n",
+    "source .venv/bin/activate\n",
+    "pip install -e \".[datalib]\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "50f4809a",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 2) Start a mock OpenAI server (Prism)\n",
+    "\n",
+    "Find the OpenAPI spec in the repo, then run Prism on port `4010`:\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "61bb1c2a",
+   "metadata": {
+    "vscode": {
+     "languageId": "bash"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "cd /home/ahi5/_workspace_/danny663788/Marlin/Marlin-sample-01/baseline/openai-python-4e28a4\n",
+    "\n",
+    "SPEC=$(find . -type f \\( -iname \"openapi*.json\" -o -iname \"openapi*.yaml\" -o -iname \"openapi*.yml\" \\) | head -n 1)\n",
+    "echo \"Using spec: $SPEC\"\n",
+    "\n",
+    "npx @stoplight/prism-cli mock \"$SPEC\" -h 127.0.0.1 -p 4010"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8f3c083b",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "Keep this terminal open.\n",
+    "\n",
+    "### 3) Point SDK examples to the mock\n",
+    "\n",
+    "In a second terminal:\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9ae8a85c",
+   "metadata": {
+    "vscode": {
+     "languageId": "bash"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "cd /home/ahi5/_workspace_/danny663788/Marlin/Marlin-sample-01/baseline/openai-python-4e28a4\n",
+    "source .venv/bin/activate\n",
+    "\n",
+    "export OPENAI_API_KEY=\"sk-mock\"\n",
+    "export OPENAI_BASE_URL=\"http://127.0.0.1:4010/v1\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1ac31c38",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 4) Run examples\n",
+    "\n",
+    "Start with simple non-streaming examples:\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cd459b9e",
+   "metadata": {
+    "vscode": {
+     "languageId": "bash"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "python examples/demo.py\n",
+    "python examples/module_client.py\n",
+    "python examples/parsing.py"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "103dc59e",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### 5) Notes\n",
+    "\n",
+    "- `audio`, `realtime`, uploads, and some streaming examples may fail or be limited with a schema mock.\n",
+    "- If a script hardcodes unsupported params, Prism may return validation errors; that is expected for strict mock mode.\n",
+    "- Azure examples (`examples/azure*.py`) need Azure-specific env vars and are separate from standard OpenAI mock flow.\n",
+    "\n",
+    "If you want, I can give a **tested subset list** of examples most likely to succeed on a strict Prism mock."
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "id": "b556a69e",
    "metadata": {},
    "source": [
