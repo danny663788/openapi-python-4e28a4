@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["WebSearchToolParam", "UserLocation"]
+__all__ = ["WebSearchToolParam", "UserLocation", "DomainFilter"]
 
 
 class UserLocation(TypedDict, total=False):
@@ -31,6 +31,20 @@ class UserLocation(TypedDict, total=False):
     """
 
 
+class DomainFilter(TypedDict, total=False):
+    include: List[str]
+    """
+    Domains to include in search results. Supports exact matches like `github.com`
+    and wildcard suffixes like `.edu`.
+    """
+
+    exclude: List[str]
+    """
+    Domains to exclude from search results. Supports exact matches like
+    `example.com` and wildcard suffixes like `.gov`.
+    """
+
+
 class WebSearchToolParam(TypedDict, total=False):
     type: Required[Literal["web_search_preview", "web_search_preview_2025_03_11"]]
     """The type of the web search tool.
@@ -47,3 +61,9 @@ class WebSearchToolParam(TypedDict, total=False):
 
     user_location: Optional[UserLocation]
     """The user's location."""
+
+    domain_filter: Optional[DomainFilter]
+    """
+    Filter search results by specific domains. Supports exact matches like
+    `github.com` and wildcard suffixes like `.edu`.
+    """
