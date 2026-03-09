@@ -1,11 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["WebSearchTool", "UserLocation"]
+__all__ = ["WebSearchTool", "UserLocation", "DomainFilter"]
 
 
 class UserLocation(BaseModel):
@@ -31,6 +31,20 @@ class UserLocation(BaseModel):
     """
 
 
+class DomainFilter(BaseModel):
+    include: Optional[List[str]] = None
+    """
+    Domains to include in search results. Supports exact matches like `github.com`
+    and wildcard suffixes like `.edu`.
+    """
+
+    exclude: Optional[List[str]] = None
+    """
+    Domains to exclude from search results. Supports exact matches like
+    `example.com` and wildcard suffixes like `.gov`.
+    """
+
+
 class WebSearchTool(BaseModel):
     type: Literal["web_search_preview", "web_search_preview_2025_03_11"]
     """The type of the web search tool.
@@ -47,3 +61,9 @@ class WebSearchTool(BaseModel):
 
     user_location: Optional[UserLocation] = None
     """The user's location."""
+
+    domain_filter: Optional[DomainFilter] = None
+    """
+    Filter search results by specific domains. Supports exact matches like
+    `github.com` and wildcard suffixes like `.edu`.
+    """
