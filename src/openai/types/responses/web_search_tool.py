@@ -1,11 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._models import BaseModel
 
-__all__ = ["WebSearchTool", "UserLocation"]
+__all__ = ["WebSearchTool", "UserLocation", "AllowedDomain", "BlockedDomain"]
 
 
 class UserLocation(BaseModel):
@@ -31,11 +31,37 @@ class UserLocation(BaseModel):
     """
 
 
+class AllowedDomain(BaseModel):
+    domain: str
+    """The domain to allow, e.g. `github.com` or `.edu`."""
+
+
+class BlockedDomain(BaseModel):
+    domain: str
+    """The domain to block, e.g. `example.com` or `.gov`."""
+
+
 class WebSearchTool(BaseModel):
     type: Literal["web_search_preview", "web_search_preview_2025_03_11"]
     """The type of the web search tool.
 
     One of `web_search_preview` or `web_search_preview_2025_03_11`.
+    """
+
+    allowed_domains: Optional[List[AllowedDomain]] = None
+    """A list of domains to restrict search results to.
+
+    Supports exact matches (e.g. `github.com`) and wildcards (e.g. `.edu`, `.gov`).
+    When set, only results from these domains will be returned. Cannot be used
+    together with `blocked_domains`.
+    """
+
+    blocked_domains: Optional[List[BlockedDomain]] = None
+    """A list of domains to exclude from search results.
+
+    Supports exact matches (e.g. `example.com`) and wildcards (e.g. `.gov`).
+    When set, results from these domains will be excluded. Cannot be used
+    together with `allowed_domains`.
     """
 
     search_context_size: Optional[Literal["low", "medium", "high"]] = None
