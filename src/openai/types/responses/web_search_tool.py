@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal
 
 from ..._models import BaseModel
@@ -47,3 +47,19 @@ class WebSearchTool(BaseModel):
 
     user_location: Optional[UserLocation] = None
     """The user's location."""
+
+    allowed_domains: Optional[List[str]] = None
+    """A list of domains to restrict search results to.
+
+    Each entry can be an exact domain (e.g. `"github.com"`) or a suffix wildcard
+    (e.g. `".edu"`, `".gov"`) to match all sub-domains with that suffix.
+    Cannot be used together with `blocked_domains`.
+    """
+
+    blocked_domains: Optional[List[str]] = None
+    """A list of domains to exclude from search results.
+
+    Each entry can be an exact domain (e.g. `"example.com"`) or a suffix wildcard
+    (e.g. `".edu"`, `".gov"`) to exclude all sub-domains with that suffix.
+    Cannot be used together with `allowed_domains`.
+    """
