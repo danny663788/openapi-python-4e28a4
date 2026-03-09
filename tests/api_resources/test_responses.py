@@ -68,7 +68,15 @@ class TestResponses:
                     "strict": True,
                     "type": "function",
                     "description": "description",
-                }
+                },
+                {
+                    "type": "web_search_preview",
+                    "search_context_size": "low",
+                    "domain_filter": {
+                        "include": ["github.com", ".edu"],
+                        "exclude": ["example.com", ".gov"],
+                    },
+                },
             ],
             top_logprobs=0,
             top_p=1,
@@ -147,7 +155,15 @@ class TestResponses:
                     "strict": True,
                     "type": "function",
                     "description": "description",
-                }
+                },
+                {
+                    "type": "web_search_preview",
+                    "search_context_size": "low",
+                    "domain_filter": {
+                        "include": ["github.com", ".edu"],
+                        "exclude": ["example.com", ".gov"],
+                    },
+                },
             ],
             top_logprobs=0,
             top_p=1,

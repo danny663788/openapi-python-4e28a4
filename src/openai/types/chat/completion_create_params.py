@@ -26,6 +26,7 @@ __all__ = [
     "Function",
     "ResponseFormat",
     "WebSearchOptions",
+    "WebSearchOptionsDomainFilter",
     "WebSearchOptionsUserLocation",
     "WebSearchOptionsUserLocationApproximate",
     "CompletionCreateParamsNonStreaming",
@@ -392,6 +393,20 @@ class WebSearchOptionsUserLocation(TypedDict, total=False):
     """The type of location approximation. Always `approximate`."""
 
 
+class WebSearchOptionsDomainFilter(TypedDict, total=False):
+    include: List[str]
+    """
+    Domains to include in search results. Supports exact matches like `github.com`
+    and wildcard suffixes like `.edu`.
+    """
+
+    exclude: List[str]
+    """
+    Domains to exclude from search results. Supports exact matches like
+    `example.com` and wildcard suffixes like `.gov`.
+    """
+
+
 class WebSearchOptions(TypedDict, total=False):
     search_context_size: Literal["low", "medium", "high"]
     """
@@ -401,6 +416,12 @@ class WebSearchOptions(TypedDict, total=False):
 
     user_location: Optional[WebSearchOptionsUserLocation]
     """Approximate location parameters for the search."""
+
+    domain_filter: Optional[WebSearchOptionsDomainFilter]
+    """
+    Filter search results by specific domains. Supports exact matches like
+    `github.com` and wildcard suffixes like `.edu`.
+    """
 
 
 class CompletionCreateParamsNonStreaming(CompletionCreateParamsBase, total=False):

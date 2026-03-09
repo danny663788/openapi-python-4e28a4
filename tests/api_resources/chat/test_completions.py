@@ -113,6 +113,10 @@ class TestCompletions:
                     },
                     "type": "approximate",
                 },
+                "domain_filter": {
+                    "include": ["github.com", ".edu"],
+                    "exclude": ["example.com", ".gov"],
+                },
             },
         )
         assert_matches_type(ChatCompletion, completion, path=["response"])
@@ -244,6 +248,10 @@ class TestCompletions:
                         "timezone": "timezone",
                     },
                     "type": "approximate",
+                },
+                "domain_filter": {
+                    "include": ["github.com", ".edu"],
+                    "exclude": ["example.com", ".gov"],
                 },
             },
         )
