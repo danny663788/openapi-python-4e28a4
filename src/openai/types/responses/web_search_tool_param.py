@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 from typing_extensions import Literal, Required, TypedDict
 
 __all__ = ["WebSearchToolParam", "UserLocation"]
@@ -36,6 +36,22 @@ class WebSearchToolParam(TypedDict, total=False):
     """The type of the web search tool.
 
     One of `web_search_preview` or `web_search_preview_2025_03_11`.
+    """
+
+    allowed_domains: Optional[List[str]]
+    """A list of domains to restrict search results to.
+
+    Each entry may be an exact domain (e.g. `"github.com"`) or a wildcard pattern
+    (e.g. `"*.edu"`, `"*.gov"`). When set, only results from these domains are
+    returned. Cannot be used together with `blocked_domains`.
+    """
+
+    blocked_domains: Optional[List[str]]
+    """A list of domains to exclude from search results.
+
+    Each entry may be an exact domain (e.g. `"example.com"`) or a wildcard pattern
+    (e.g. `"*.ads.com"`). When set, results from these domains are filtered out.
+    Cannot be used together with `allowed_domains`.
     """
 
     search_context_size: Literal["low", "medium", "high"]
