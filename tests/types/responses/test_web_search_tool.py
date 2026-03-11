@@ -38,10 +38,9 @@ def test_web_search_tool_param_blocked_domains() -> None:
 
 
 def test_web_search_tool_wildcard_patterns() -> None:
+    domains = ["*.edu", "*.gov", "en.wikipedia.org"]
     tool = WebSearchTool(
         type="web_search_preview_2025_03_11",
-        allowed_domains=["*.edu", "*.gov", "en.wikipedia.org"],
+        allowed_domains=domains,
     )
-    assert "*.edu" in (tool.allowed_domains or [])
-    assert "*.gov" in (tool.allowed_domains or [])
-    assert "en.wikipedia.org" in (tool.allowed_domains or [])
+    assert tool.allowed_domains == domains
